@@ -36,7 +36,7 @@ public class CRSConsole {
         boolean exit = false;
         while (!exit) {
             System.out.println("\n==== CRS Console ====");
-            System.out.println("Om Swastyastu - Semangat gotong royong Bali!");
+            System.out.println("Om Swastyastu!");
             System.out.println("1. Register Staff");
             System.out.println("2. Register Volunteer");
             System.out.println("3. Login as Staff");
