@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Name: A. A Ngurah Aragon Udayana
+ * Student ID: E2400070
+ * BIT203 Advanced OO Programming
+ * Assignment 1
+ */
+/**
  * Trip organized by CRS staff to respond to a crisis.
  * Student: A. A Ngurah Aragon Udayana (E2400070), Date: 2024-11-14
  */

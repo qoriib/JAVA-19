@@ -1,3 +1,10 @@
+
+/**
+ * Name: A. A Ngurah Aragon Udayana
+ * Student ID: E2400070
+ * BIT203 Advanced OO Programming
+ * Assignment 1
+ */
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -5,7 +12,6 @@ import java.util.Scanner;
 
 /**
  * Console driven UI for the java CRSConsole application.
- * Student: A. A Ngurah Aragon Udayana (E2400070), Date: 2024-11-14
  */
 public class CRSConsole {
     private final CRS crs = new CRS();
@@ -19,7 +25,7 @@ public class CRSConsole {
         boolean exit = false;
         while (!exit) {
             System.out.println("\n==== CRS Console ====");
-            System.out.println("Om Swastyastu - Semangat gotong royong Bali!");
+            System.out.println("Om Swastyastu!");
             System.out.println("1. Register Staff");
             System.out.println("2. Register Volunteer");
             System.out.println("3. Login as Staff");
@@ -147,9 +153,11 @@ public class CRSConsole {
             System.out.println("You have no trips to manage.");
             return;
         }
+        System.out.println("-- Manage Applications --");
         System.out.println("Select a trip:");
         for (Trip trip : trips) {
-            System.out.println(trip.getTripId() + " - " + trip.getDescription());
+            System.out.println("* " + trip.getTripId() + " - " + trip.getDescription()
+                    + " (Date: " + trip.getTripDate() + ", Remaining: " + trip.getRemainingSlots() + ")");
         }
         String tripId = prompt("Trip ID");
         List<Application> applications = crs.getApplicationsForTrip(tripId);
@@ -173,17 +181,23 @@ public class CRSConsole {
         for (Application application : applications) {
             Volunteer volunteer = application.getVolunteer();
             System.out.println("Application " + application.getApplicationId());
-            System.out.println("  Volunteer: " + volunteer.getName() + " (" + volunteer.getPhone() + ")");
-            System.out.println("  Status: " + application.getStatus());
+            System.out.println("  Volunteer : " + volunteer.getName() + " (" + volunteer.getPhone() + ")");
+            System.out.println("  Status    : " + application.getStatus());
             if (application.getRemarks() != null) {
-                System.out.println("  Remarks: " + application.getRemarks());
+                System.out.println("  Remarks   : " + application.getRemarks());
             }
             if (volunteer.getDocuments().isEmpty()) {
                 System.out.println("  Documents: none");
             } else {
                 System.out.println("  Documents:");
                 for (Document document : volunteer.getDocuments()) {
-                    System.out.println("    - " + document);
+                    System.out.println("    - Type  : " + document.getDocumentType());
+                    if (document.getExpiryDate() != null) {
+                        System.out.println("      Expiry: " + document.getExpiryDate());
+                    }
+                    if (document.getImagePath() != null) {
+                        System.out.println("      Image : " + document.getImagePath());
+                    }
                 }
             }
         }
@@ -217,7 +231,7 @@ public class CRSConsole {
 
     private void updateVolunteerProfile(Volunteer volunteer) {
         System.out.println("-- Update Profile --");
-        String name = prompt("New name (leave blank to keep)" );
+        String name = prompt("New name (leave blank to keep)");
         String phone = prompt("New phone (leave blank to keep)");
         String password = prompt("New password (leave blank to keep)");
         crs.updateVolunteerProfile(volunteer.getUsername(),
@@ -269,7 +283,13 @@ public class CRSConsole {
         }
         System.out.println("-- Available Trips (Destinasi Bali sangat diutamakan) --");
         for (Trip trip : trips) {
-            System.out.println(trip);
+            System.out.println("* Trip ID: " + trip.getTripId());
+            System.out.println("  Date       : " + trip.getTripDate());
+            System.out.println("  Destination: " + trip.getDestination());
+            System.out.println("  Crisis     : " + trip.getCrisisType());
+            System.out.println("  Needed     : " + trip.getNumVolunteers() + " volunteers");
+            System.out.println("  Remaining  : " + trip.getRemainingSlots() + " slots");
+            System.out.println("  Description: " + trip.getDescription());
         }
     }
 
