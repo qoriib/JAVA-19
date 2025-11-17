@@ -11,21 +11,32 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Console driven UI for the java CRSConsole application.
+ * Console driven UI for the Crisis Relief Services application.
  */
 public class CRSConsole {
+    /** Controller that manages domain logic. */
     private final CRS crs = new CRS();
+
+    /** Shared scanner for console input. */
     private final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Application entry point.
+     *
+     * @param args CLI arguments (unused)
+     */
     public static void main(String[] args) {
         new CRSConsole().run();
     }
 
+    /**
+     * Runs the main loop for the console UI.
+     */
     private void run() {
         boolean exit = false;
         while (!exit) {
             System.out.println("\n==== CRS Console ====");
-            System.out.println("Om Swastyastu!");
+            System.out.println("Om Swastyastu - Semangat gotong royong Bali!");
             System.out.println("1. Register Staff");
             System.out.println("2. Register Volunteer");
             System.out.println("3. Login as Staff");
@@ -52,6 +63,9 @@ public class CRSConsole {
         System.out.println("Goodbye!");
     }
 
+    /**
+     * Handles staff registration workflow.
+     */
     private void handleRegisterStaff() {
         System.out.println("-- Register Staff --");
         String username = prompt("Username");
@@ -64,6 +78,9 @@ public class CRSConsole {
         System.out.println("Staff registered successfully.");
     }
 
+    /**
+     * Handles volunteer registration workflow.
+     */
     private void handleRegisterVolunteer() {
         System.out.println("-- Register Volunteer --");
         String username = prompt("Username");
@@ -74,18 +91,32 @@ public class CRSConsole {
         System.out.println("Volunteer registered. You may now log in.");
     }
 
+    /**
+     * Performs staff login and opens session menu on success.
+     */
     private void handleStaffLogin() {
         System.out.println("-- Staff Login --");
         Staff staff = (Staff) requireUser(prompt("Username"), prompt("Password"), Staff.class);
         staffSession(staff);
     }
 
+    /**
+     * Performs volunteer login and opens session menu on success.
+     */
     private void handleVolunteerLogin() {
         System.out.println("-- Volunteer Login --");
         Volunteer volunteer = (Volunteer) requireUser(prompt("Username"), prompt("Password"), Volunteer.class);
         volunteerSession(volunteer);
     }
 
+    /**
+     * Authenticates and ensures the user is of the expected type.
+     *
+     * @param username username
+     * @param password password
+     * @param type     expected class type
+     * @return authenticated user
+     */
     private User requireUser(String username, String password, Class<? extends User> type) {
         User user = crs.authenticate(username, password);
         if (user == null || !type.isInstance(user)) {
@@ -94,6 +125,11 @@ public class CRSConsole {
         return user;
     }
 
+    /**
+     * Staff session menu loop.
+     *
+     * @param staff logged-in staff
+     */
     private void staffSession(Staff staff) {
         System.out.println("Welcome, " + staff.getName());
         boolean logout = false;
@@ -118,6 +154,11 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Guides staff through trip creation.
+     *
+     * @param staff organizer
+     */
     private void organizeTrip(Staff staff) {
         System.out.println("-- Organize Trip --");
         LocalDate date = readDate("Trip date (yyyy-MM-dd)");
@@ -129,6 +170,11 @@ public class CRSConsole {
         System.out.println("Trip created with ID: " + trip.getTripId());
     }
 
+    /**
+     * Displays trips organized by the given staff.
+     *
+     * @param staff organizer
+     */
     private void showStaffTrips(Staff staff) {
         List<Trip> trips = crs.getTripsForStaff(staff.getUsername());
         if (trips.isEmpty()) {
@@ -147,6 +193,11 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Allows staff to review and update applications for their trips.
+     *
+     * @param staff organizer
+     */
     private void manageApplications(Staff staff) {
         List<Trip> trips = crs.getTripsForStaff(staff.getUsername());
         if (trips.isEmpty()) {
@@ -177,6 +228,11 @@ public class CRSConsole {
         System.out.println("Application updated.");
     }
 
+    /**
+     * Prints application details along with volunteer documents.
+     *
+     * @param applications list of applications
+     */
     private void printApplications(List<Application> applications) {
         for (Application application : applications) {
             Volunteer volunteer = application.getVolunteer();
@@ -203,6 +259,11 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Volunteer session menu loop.
+     *
+     * @param volunteer logged-in volunteer
+     */
     private void volunteerSession(Volunteer volunteer) {
         System.out.println("Welcome, " + volunteer.getName());
         boolean logout = false;
@@ -229,6 +290,11 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Updates a volunteer profile.
+     *
+     * @param volunteer volunteer
+     */
     private void updateVolunteerProfile(Volunteer volunteer) {
         System.out.println("-- Update Profile --");
         String name = prompt("New name (leave blank to keep)");
@@ -241,6 +307,11 @@ public class CRSConsole {
         System.out.println("Profile updated.");
     }
 
+    /**
+     * Uploads a document to the volunteer profile.
+     *
+     * @param volunteer volunteer
+     */
     private void uploadDocument(Volunteer volunteer) {
         System.out.println("-- Upload Document --");
         DocumentType type = readDocumentType();
@@ -251,6 +322,11 @@ public class CRSConsole {
         System.out.println("Document added.");
     }
 
+    /**
+     * Allows volunteer to view trips and submit an application.
+     *
+     * @param volunteer volunteer
+     */
     private void applyForTrip(Volunteer volunteer) {
         listTrips();
         String tripId = prompt("Enter trip ID to apply");
@@ -258,6 +334,11 @@ public class CRSConsole {
         System.out.println("Application submitted with ID: " + application.getApplicationId());
     }
 
+    /**
+     * Displays applications belonging to the volunteer.
+     *
+     * @param volunteer volunteer
+     */
     private void showVolunteerApplications(Volunteer volunteer) {
         List<Application> applications = crs.getApplicationsForVolunteer(volunteer.getUsername());
         if (applications.isEmpty()) {
@@ -275,6 +356,9 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Lists all trips in the system.
+     */
     private void listTrips() {
         List<Trip> trips = crs.getAllTrips();
         if (trips.isEmpty()) {
@@ -293,19 +377,11 @@ public class CRSConsole {
         }
     }
 
-    private void listUsers() {
-        List<User> users = crs.getAllUsersSortedByName();
-        if (users.isEmpty()) {
-            System.out.println("Belum ada pengguna terdaftar.");
-            return;
-        }
-        System.out.println("-- Daftar Pengguna (urutan nama) --");
-        for (User user : users) {
-            String role = (user instanceof Staff) ? "Staff" : "Volunteer";
-            System.out.println(role + ": " + user.getName() + " [" + user.getUsername() + "] " + user.getPhone());
-        }
-    }
-
+    /**
+     * Reads a crisis type selection from the user.
+     *
+     * @return selected crisis type
+     */
     private CrisisType readCrisisType() {
         System.out.println("Select crisis type:");
         CrisisType[] values = CrisisType.values();
@@ -321,6 +397,11 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Reads an application status selection from the user.
+     *
+     * @return selected status
+     */
     private ApplicationStatus readApplicationStatus() {
         System.out.println("Select status:");
         ApplicationStatus[] values = ApplicationStatus.values();
@@ -336,6 +417,11 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Reads a document type selection from the user.
+     *
+     * @return selected document type
+     */
     private DocumentType readDocumentType() {
         System.out.println("Select document type:");
         DocumentType[] values = DocumentType.values();
@@ -351,11 +437,23 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Prompts for a line of text.
+     *
+     * @param label prompt label
+     * @return input string trimmed
+     */
     private String prompt(String label) {
         System.out.print(label + ": ");
         return scanner.nextLine().trim();
     }
 
+    /**
+     * Reads an integer with retry on invalid input.
+     *
+     * @param label prompt label
+     * @return parsed integer
+     */
     private int readInt(String label) {
         while (true) {
             try {
@@ -368,6 +466,12 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Reads a required date in ISO format.
+     *
+     * @param label prompt label
+     * @return parsed date
+     */
     private LocalDate readDate(String label) {
         while (true) {
             try {
@@ -380,6 +484,12 @@ public class CRSConsole {
         }
     }
 
+    /**
+     * Reads an optional date in ISO format.
+     *
+     * @param label prompt label
+     * @return parsed date or null if blank
+     */
     private LocalDate readOptionalDate(String label) {
         while (true) {
             System.out.print(label + ": ");
@@ -392,6 +502,22 @@ public class CRSConsole {
             } catch (DateTimeParseException ex) {
                 System.out.println("Invalid date format. Use yyyy-MM-dd.");
             }
+        }
+    }
+
+    /**
+     * Lists all users sorted by name.
+     */
+    private void listUsers() {
+        List<User> users = crs.getAllUsersSortedByName();
+        if (users.isEmpty()) {
+            System.out.println("Belum ada pengguna terdaftar.");
+            return;
+        }
+        System.out.println("-- Daftar Pengguna (urutan nama) --");
+        for (User user : users) {
+            String role = (user instanceof Staff) ? "Staff" : "Volunteer";
+            System.out.println(role + ": " + user.getName() + " [" + user.getUsername() + "] " + user.getPhone());
         }
     }
 }

@@ -1,5 +1,3 @@
-import java.time.LocalDate;
-import java.util.Objects;
 
 /**
  * Name: A. A Ngurah Aragon Udayana
@@ -7,14 +5,21 @@ import java.util.Objects;
  * BIT203 Advanced OO Programming
  * Assignment 1
  */
+import java.time.LocalDate;
+import java.util.Objects;
+
 /**
  * Represents a document submitted by a volunteer as part of the verification
  * process.
- * Student: A. A Ngurah Aragon Udayana (E2400070), Date: 2024-11-14
  */
 public class Document {
+    /** Document category. */
     private final DocumentType documentType;
+
+    /** Expiry date if applicable. */
     private final LocalDate expiryDate;
+
+    /** Stored image location or reference. */
     private final String imagePath;
 
     /**
@@ -30,14 +35,23 @@ public class Document {
         this.imagePath = imagePath;
     }
 
+    /**
+     * @return document type
+     */
     public DocumentType getDocumentType() {
         return documentType;
     }
 
+    /**
+     * @return expiry date or {@code null}
+     */
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
 
+    /**
+     * @return image reference or {@code null}
+     */
     public String getImagePath() {
         return imagePath;
     }
