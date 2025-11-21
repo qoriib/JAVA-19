@@ -365,7 +365,7 @@ public class CRSConsole {
             System.out.println("No trips have been organized yet.");
             return;
         }
-        System.out.println("-- Available Trips (Destinasi Bali sangat diutamakan) --");
+        System.out.println("-- Available Trips --");
         for (Trip trip : trips) {
             System.out.println("* Trip ID: " + trip.getTripId());
             System.out.println("  Date       : " + trip.getTripDate());
@@ -511,10 +511,10 @@ public class CRSConsole {
     private void listUsers() {
         List<User> users = crs.getAllUsersSortedByName();
         if (users.isEmpty()) {
-            System.out.println("Belum ada pengguna terdaftar.");
+            System.out.println("No users have been registered yet.");
             return;
         }
-        System.out.println("-- Daftar Pengguna (urutan nama) --");
+        System.out.println("-- Users (sorted by name) --");
         for (User user : users) {
             String role = (user instanceof Staff) ? "Staff" : "Volunteer";
             System.out.println(role + ": " + user.getName() + " [" + user.getUsername() + "] " + user.getPhone());
